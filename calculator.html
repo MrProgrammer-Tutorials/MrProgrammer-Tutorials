@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Tutorials</title>
+
+    <style>
+
+        /* TEMPLATE */
+        body {
+            background-color: antiquewhite;
+            font-size: 80%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        header{
+            display: flex;
+            justify-content: center;
+        }
+
+        #tik-tok-icon{
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 25px;
+        }
+
+        .icon-gif {
+            width: 25px;
+        }
+
+        .window{
+            border: 1px solid;
+            border-radius: 10px;
+            box-shadow: 5px 5px 5px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            width: 80%;
+        }
+
+        .title{
+            text-align: center;
+            text-decoration: underline;
+        }
+
+        .content{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 10px;
+            background-color: white;
+            border: 1px solid;
+            min-height: 100px;
+        }
+
+        /* -------------------------------------- */
+
+        input{
+            margin: 10px;
+        }
+
+        .buttons{
+            margin: 10px;
+            display: grid;
+            grid-template-rows: repeat(5, 1fr);
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        button{
+            padding: 5px 10px;
+        }
+
+        .number{
+            border-radius: 10px;
+            background-color: darkred;
+            color: white;
+        }
+
+        .operator, #equals, #clear{
+            border-radius: 10px;
+            background-color: darkgoldenrod;
+            color: white;
+        }
+
+        .number {
+            grid-column-start: span 1;
+        }
+
+        .number:nth-child(13) {
+            grid-column-start: span 2;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- TEMPLATE -->
+
+    <header>
+        <img src="Images/Intro/icons8-laptop.gif"
+                alt="icon-gif" class="icon-gif">
+    </header>
+
+    <div class="window">
+        <img src="Images/Intro/tik-tok.png" alt="tik-tok-icon" class="icon-png" id="tik-tok-icon">
+        <div class="title">
+            <h3>Calculator</h3>
+        </div>
+        <div class="content">
+    <!-- ----------------------------- -->
+            <input type="text" id="screen" disabled>
+            <div class="buttons">
+                <button class="number">7</button>
+                <button class="number">8</button>
+                <button class="number">9</button>
+                <button class="operator">*</button>
+                <button class="number">4</button>
+                <button class="number">5</button>
+                <button class="number">6</button>
+                <button class="operator">-</button>
+                <button class="number">1</button>
+                <button class="number">2</button>
+                <button class="number">3</button>
+                <button class="operator">+</button>
+                <button class="number" style="grid-column: span 2;">0</button>
+                <button class="number">.</button>
+                <button class="operator">/</button>
+                <button id="equals" style="grid-column: span 3;">=</button>
+                <button id="clear">C</button>
+            </div>
+    <!-- ----------------------------- -->
+        </div>
+    </div>
+
+    <script>
+        const screen = document.getElementById("screen");
+        const numberButtons = document.querySelectorAll(".number");
+        const operatorButtons = document.querySelectorAll(".operator");
+        const equalsButton = document.getElementById("equals");
+        const clearButton = document.getElementById("clear");
+
+        let currentInput = "";
+        let operator = "";
+        let currentResult = "";
+
+        numberButtons.forEach(button => {
+            button.addEventListener("click", () => {
+                if (button.innerText === "." && currentInput.includes(".")) {
+                    return;
+                }
+                currentInput += button.innerText;
+                screen.value = currentInput;
+            });
+        });
+
+        operatorButtons.forEach(button => {
+            button.addEventListener("click", () => {
+                operator = button.innerText;
+                currentResult = currentInput;
+                currentInput = "";
+            });
+        });
+
+        equalsButton.addEventListener("click", () => {
+            if (currentInput !== "") {
+                currentResult = performCalculation(parseFloat(currentResult), parseFloat(currentInput), operator);
+                screen.value = currentResult;
+                currentInput = "";
+                operator = "";
+            }
+        });
+
+        clearButton.addEventListener("click", () => {
+            currentInput = "";
+            operator = "";
+            currentResult = "";
+            screen.value = "";
+        });
+
+        function performCalculation(num1, num2, operator) {
+            switch (operator) {
+                case "+":
+                    return num1 + num2;
+                case "-":
+                    return num1 - num2;
+                case "*":
+                    return num1 * num2;
+                case "/":
+                    if (num2 === 0) {
+                        return "Error";
+                    }
+                    return num1 / num2;
+                default:
+                    return num2;
+            }
+        }
+
+    </script>
+</body>
+</html>
